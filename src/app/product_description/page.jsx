@@ -1,38 +1,21 @@
 import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
 import Link from "next/link";
 import ProductCard from "../components/card";
+import {client} from "@/sanity/lib/client"
+import Shop from "../shop/page";
 
-export const products = [
-    {
-      id:1,
-      image: "shopcard1.png",
-      title: "Product 1",
-      description: "This is a description for Product 1.",
-      price: "$49.99",
-    },
-    { 
-      id:2,
-      image: "shopcard2.png",
-      title: "Product 2",
-      description: "This is a description for Product 2.",
-      price: "$59.99",
-    },
-    {
-      id:3,
-      image: "shopcard3.png",
-      title: "Product 3",
-      description: "This is a description for Product 3.",
-      price: "$69.99",
-    },
-    {
-      id:4,
-      image: "shopcard4.jpg",
-      title: "Product 4",
-      description: "This is a description for Product 4.",
-      price: "$69.99",
-    },
-];
-function ProductDescription(){
+ async function ProductDescription(){
+    const data = await client.fetch(`*[_type=="product_details"]{
+        _id,
+        heading,
+          subheading_desc,
+          subheading,
+          "imageUrl": image.asset->url
+      }`)
+      console.log(data[1]);
+      
+      const products= [...data]
+      
     return(
         <>
         <div className="w-screen h-[100px] bg-orange-100 mt-[30px]">
@@ -120,21 +103,21 @@ function ProductDescription(){
             <h1>Related Products</h1>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-16 px-4 mt-16 ml-[70px]">
-      {products.map((product, index) => (
-        <div key={product.id} className="product-card">
-            <Link href="/product_description">
-        <ProductCard
-          key={product.id}
-          products={product}
-          image={product.image}
-          title={product.title}
-          description={product.description}
-          price={product.price}
-        />
-        </Link>
-        </div>
-      
-      ))}
+        {products.map((product) => (
+  <div key={product._id} className="product-card">
+    {console.log(product._id)}
+    <Link href="/product_description">
+      <ProductCard
+        
+        products={product}
+        image={product.imageUrl}
+        title={product.heading}
+        description={product.subheading_desc}
+        price={product.subheading}
+      />
+    </Link>
+  </div>
+))}
     </div>
 
     <div className=" flex mt-[100px] mb-[100px] items-center justify-center">

@@ -1,73 +1,26 @@
 import React from "react";
 import Link from "next/link";
-
 import ProductCard from "./components/card";
+import {client} from "@/sanity/lib/client"
 
-export default function Home() {
-  const products = [
-    {
-      id:1,
-      image: "card1.png",
-      title: "Product 1",
-      description: "This is a description for Product 1.",
-      price: "$49.99",
-    },
-    {
-      id:2,
-      image: "card2.png",
-      title: "Product 2",
-      description: "This is a description for Product 2.",
-      price: "$59.99",
-    },
-    {
-      id:3,
-      image: "card3.jpeg",
-      title: "Product 3",
-      description: "This is a description for Product 3.",
-      price: "$69.99",
-    },
-    {
-      id:4,
-      image: "card4.png",
-      title: "Product 4",
-      description: "This is a description for Product 4.",
-      price: "$69.99",
-    },
-    {
-      id:5,
-      image: "card5.png",
-      title: "Product 5",
-      description: "This is a description for Product 5.",
-      price: "$69.99",
-    },
-    {
-      id:6,
-      image: "card6.jpeg",
-      title: "Product 6",
-      description: "This is a description for Product 6.",
-      price: "$69.99",
-    },
-    {
-      id:7,
-      image: "card7.jpeg",
-      title: "Product 7",
-      description: "This is a description for Product 7.",
-      price: "$69.99",
-    },
-    {
-      id:8,
-      image: "card8.png",
-      title: "Product 8",
-      description: "This is a description for Product 8.",
-      price: "$69.99",
-    },
-  ];
+export default async function Home() {
+  
+    const data = await client.fetch(`*[_type=="product_details"]{
+      _id,
+      heading,
+      subheading_desc,
+      subheading,
+      "imageUrl": image.asset->url
+  }`)
+  
+  const products= [...data,...data,...data]
+  
   return (
     <>
     
     <div className="relative">
       <img src="background1.jpeg" className="h-[850] w-screen mt-10" ></img>
-      <div className="absolute inset-0 flex h-[500] w-[650] bg-orange-100 mt-[80] ml-[750] rounded-lg">
+      <div className="absolute inset-0 flex h-[500] w-[550] bg-orange-100 mt-[80] ml-[750] rounded-lg">
         <div className="ml-[40px] mt-[40px] mr-[40px]">
         <div className="space-y-6 ">
           <h1 className="text-2xl">New Arrival</h1>
@@ -76,7 +29,7 @@ export default function Home() {
           <Link href="/shop">
           <div className="flex items-center justify-center mt-[30px]  bg-yellow-600 w-[210px] h-[100px] ">
           
-          <button className=" text-white">BUY NOW</button>
+          <button className=" text-white hover:cursor-pointer">BUY NOW</button>
           </div>
           </Link>
           </div>
@@ -85,8 +38,8 @@ export default function Home() {
     </div>
     <div className="">
       
-      <h1 className=" w-screen leading-none ml-[600px] mt-[80px] text-4xl font-bold">Browse The Range</h1>
-      <p className=" w-screen leading-none ml-[570px] mt-[30px] text-gray-400">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+      <h1 className=" leading-none ml-[600px] mt-[80px] text-4xl font-bold">Browse The Range</h1>
+      <p className=" leading-none ml-[570px] mt-[30px] text-gray-400">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
       
       <div className="absolute space-x-12 flex mt-[40px] ml-[270]">
         <img src="background2.png" className="w-[300] h-[400] rounded-lg " ></img>
@@ -105,19 +58,19 @@ export default function Home() {
       <h1>Our Products</h1>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-16 px-4 mt-16 ml-[70px]">
-      {products.map((product, index) => (
-        <div key={product.id} className="product-card">
-            <Link href="/product_description">
-        <ProductCard
-          key={product.id}
-          products={product}
-          image={product.image}
-          title={product.title}
-          description={product.description}
-          price={product.price}
-        />
-        </Link>
-        </div>
+    {products.map((product,index) => (
+  <div key={`${product._id}-${index}`} className="product-card">
+    <Link href="/product_description">
+      <ProductCard
+        
+        products={product}
+        image={product.imageUrl}
+        title={product.heading}
+        description={product.subheading_desc}
+        price={product.subheading}
+      />
+    </Link>
+  </div>
       
       ))}
     </div>
@@ -132,7 +85,7 @@ export default function Home() {
         <h1 className=" text-4xl font-bold text-black">50+ Beautiful Rooms Inspiration</h1>
         <p className="mt-4">Our designer already made a lot of beautiful prototipe of rooms that inspire you</p>
         <Link href="/shop">
-        <button className="text-bold w-[150px] h-[40px] bg-yellow-600 text-white mt-4">Explore More</button>
+        <button className="text-bold w-[150px] h-[40px] bg-yellow-600 text-white mt-4 cursor-pointer">Explore More</button>
         </Link>
       </div>
       <img className="w-[350px] h-[540px] ml-[40px] mt-[30px] " src="home1.png"></img>
@@ -155,8 +108,8 @@ export default function Home() {
 
     <div>
     <div className=" space-y-4 ml-[550px] mt-[50px]">
-      <div className="w-screen h-[30px] mt-[50px] ml-[100px] text-xl font-bold text-gray-600 ">Share your setup with</div>
-      <div className="w-screen h-[86px] mt-[80px] text-5xl font-bold text-gray-700">#FurniroFurniture</div>
+      <div className=" h-[30px] mt-[50px] ml-[100px] text-xl font-bold text-gray-600 ">Share your setup with</div>
+      <div className="h-[86px] mt-[80px] text-5xl font-bold text-gray-700">#FurniroFurniture</div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 h-[900px] w-screen space-x-2 space-y-8 mb-[400px]">
         <img src="background8.png" className="w-[260px] h-[360px] rounded-lg shadow-md"></img>

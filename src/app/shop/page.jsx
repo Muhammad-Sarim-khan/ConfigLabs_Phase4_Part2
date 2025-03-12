@@ -4,122 +4,20 @@ import { MdViewList } from "react-icons/md";
 import ProductCard from "../components/card";
 import Perks from "../components/perks";
 import Link from "next/link";
+import {client} from "@/sanity/lib/client"
 
-export const products = [
-  {
-    id:1,
-    image: "shopcard1.png",
-    title: "Product 1",
-    description: "This is a description for Product 1.",
-    price: "$49.99",
-  },
-  { 
-    id:2,
-    image: "shopcard2.png",
-    title: "Product 2",
-    description: "This is a description for Product 2.",
-    price: "$59.99",
-  },
-  {
-    id:3,
-    image: "shopcard3.png",
-    title: "Product 3",
-    description: "This is a description for Product 3.",
-    price: "$69.99",
-  },
-  {
-    id:4,
-    image: "shopcard4.jpg",
-    title: "Product 4",
-    description: "This is a description for Product 4.",
-    price: "$69.99",
-  },
-  {
-    id:5,
-    image: "shopcard1.png",
-    title: "Product 5",
-    description: "This is a description for Product 5.",
-    price: "$69.99",
-  },
-  {
-    id:6,
-    image: "shopcard2.png",
-    title: "Product 6",
-    description: "This is a description for Product 6.",
-    price: "$69.99",
-  },
-  {
-    id:7,
-    image: "shopcard3.png",
-    title: "Product 7",
-    description: "This is a description for Product 7.",
-    price: "$69.99",
-  },
-  {
-    id:8,
-    image: "shopcard4.jpg",
-    title: "Product 8",
-    description: "This is a description for Product 8.",
-    price: "$69.99",
-  },
-  {
-      id:9,
-      image: "shopcard1.png",
-      title: "Product 1",
-      description: "This is a description for Product 1.",
-      price: "$49.99",
-    },
-    {
-      id:10,
-      image: "shopcard2.png",
-      title: "Product 2",
-      description: "This is a description for Product 2.",
-      price: "$59.99",
-    },
-    {
-      id:11,
-      image: "shopcard3.png",
-      title: "Product 3",
-      description: "This is a description for Product 3.",
-      price: "$69.99",
-    },
-    {
-      id:12,
-      image: "shopcard4.jpg",
-      title: "Product 4",
-      description: "This is a description for Product 4.",
-      price: "$69.99",
-    },
-    {
-      id:13,
-      image: "shopcard1.png",
-      title: "Product 5",
-      description: "This is a description for Product 5.",
-      price: "$69.99",
-    },
-    {
-      id:14,
-      image: "shopcard2.png",
-      title: "Product 6",
-      description: "This is a description for Product 6.",
-      price: "$69.99",
-    },
-    {
-      id:15,
-      image: "shopcard3.png",
-      title: "Product 7",
-      description: "This is a description for Product 7.",
-      price: "$69.99",
-    },
-    {
-      id:16,
-      image: "shopcard4.jpg",
-      title: "Product 8",
-      description: "This is a description for Product 8.",
-      price: "$69.99",
-    },
-];
-function Shop(){
+
+async function Shop(){
+  const data = await client.fetch(`*[_type=="product_details"]{
+    _id,
+    heading,
+    subheading_desc,
+    subheading,
+    "imageUrl": image.asset->url
+}`)
+console.log(data[1]);
+
+const products= [...data,...data,...data]
 
     return(
         <>
@@ -150,23 +48,22 @@ function Shop(){
                 <input placeholder="Default" className="w-[80px] h-[40px]"></input>
             </div>
         </div>
-        {/* cards */}
+        {/*Displaying cards */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-16 px-4 mt-20 ml-[70px]">
-      {products.map((product) => (
-        <div key={product.id} className="product-card">
-            <Link href="/product_description">
-        <ProductCard
-          key={product.id}
-          products={product}
-          image={product.image}
-          title={product.title}
-          description={product.description}
-          price={product.price}
-        />
-        </Link>
-        </div>
-      
-      ))}
+    {products.map((product,index) => (
+  <div key={`${product._id}-${index}`} className="product-card">
+    <Link href="/product_description">
+      <ProductCard
+        
+        products={product}
+        image={product.imageUrl}
+        title={product.heading}
+        description={product.subheading_desc}
+        price={product.subheading}
+      />
+    </Link>
+  </div>
+))}
     </div>
     <div className="flex mt-[100px] ml-[600px] mb-[90px] space-x-12">
         <button className="w-[50px] h-[50px] rounded-sm bg-yellow-600 text-white text-2xl">1</button>
@@ -175,11 +72,7 @@ function Shop(){
         <button className="w-[90px] h-[50px] rounded-sm bg-orange-200 text-black text-2xl">Next</button>
     </div>
     
-    
-
     <Perks></Perks>
-
-    
 </>
     )
 }
