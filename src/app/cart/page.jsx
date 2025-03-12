@@ -62,7 +62,8 @@ const Cart = () => {
               </button>
               <p>Rs. {(Number(item.price) * item.quantity)}</p>
               <div className="flex w-[90px] h-[50px] bg-red-600 border-black rounded-md py-[5px] px-[5px] items-center justify-center">
-              <button onClick={() => dispatch(removeFromCart(item.id))} className="text-white cursor-pointer">Remove
+              <button onClick={() => dispatch(removeFromCart(item.id))} className="text-white cursor-pointer">
+                Remove
               </button>
               </div>
             </div>
