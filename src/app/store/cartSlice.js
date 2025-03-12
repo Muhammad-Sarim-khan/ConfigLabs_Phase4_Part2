@@ -3,15 +3,17 @@ import {client} from "@/sanity/lib/client"
 
 
 const loadCartFromStorage = () => {
-    try {
-      const serializedCart = localStorage.getItem("cartItems");
-      return serializedCart ? JSON.parse(serializedCart) : [];
-    } catch (error) {
-      console.error("Error loading cart from localStorage:", error);
-      return [];
-    }
-  };
-  
+  if (typeof window === "undefined") return []; 
+
+  try {
+    const serializedCart = localStorage.getItem("cartItems");
+    return serializedCart ? JSON.parse(serializedCart) : [];
+  } catch (error) {
+    console.error("Error loading cart from localStorage:", error);
+    return [];
+  }
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState: {

@@ -14,7 +14,7 @@ const Header = () => {
   const toggleCart = () => setIsCartOpen(!isCartOpen);
 
   const cartItems = useSelector((state) => state.cart.items);
-  console.log(cartItems);
+  
   const dispatch = useDispatch();
 
   const handleRemove = (id) => {

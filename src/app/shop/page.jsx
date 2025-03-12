@@ -15,7 +15,7 @@ async function Shop(){
     subheading,
     "imageUrl": image.asset->url
 }`)
-console.log(data[1]);
+
 
 const products= [...data,...data,...data]
 

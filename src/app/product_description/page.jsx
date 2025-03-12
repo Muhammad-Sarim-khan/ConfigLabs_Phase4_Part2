@@ -12,7 +12,7 @@ import Shop from "../shop/page";
           subheading,
           "imageUrl": image.asset->url
       }`)
-      console.log(data[1]);
+      
       
       const products= [...data]
       
@@ -105,7 +105,7 @@ import Shop from "../shop/page";
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 gap-y-16 px-4 mt-16 ml-[70px]">
         {products.map((product) => (
   <div key={product._id} className="product-card">
-    {console.log(product._id)}
+    
     <Link href="/product_description">
       <ProductCard
         
